@@ -121,4 +121,18 @@ def search_product_list(interval_count=1, interval_hours=6):
 
 
 if __name__ == '__main__':
-    search_product_list()
+    # Initalize command line argument parser
+    parser = argparse.ArgumentParser()
+
+    # Add long and short argument
+    parser.add_argument("-i", "--interval",
+                        help="determine how many times script should run")
+
+    # Read arguments from the command line
+    args = parser.parse_args()
+
+    # Check for --interval or -i
+    if args.interval:
+        search_product_list(int(args.interval))
+    else:
+        search_product_list()
