@@ -1,5 +1,6 @@
 import requests
 import argparse
+import yagmail
 from glob import glob
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -12,13 +13,14 @@ HEADERS = ({'User-Agent':
             'Accept-Language': 'en-US, en;q=0.5'})
 
 
-def search_product_list(interval_count=1, interval_hours=6):
+def search_product_list(email, interval_count=1, interval_hours=1):
     '''
     Returns whether a product is in stock, if the price is underneath a user-specified amount, and whether to buy or not.
 
             Parameters:
+                    email (string): Required, the email to send a notification to if the product is in stock and under the price threshold
                     interval_count (int): Optional, defaults to 1, the number of times the script should run
-                    interval_hours (int): Optional, defaults to 6, the number of hours between each run of the script.
+                    interval_hours (int): Optional, defaults to 1, the number of hours between each run of the script
 
             Returns:
                     No return from function but outputs a spreadsheet logging product info for each run of the script.
@@ -91,23 +93,27 @@ def search_product_list(interval_count=1, interval_hours=6):
                                 'review_score': review_score,
                                 'review_count': review_count}, index=[x])
 
-            # If the price is below the threshold, print a message otherwise, skip this step!
+            # If the price is below the threshold, send user email, otherwise, skip this step!
             try:
                 if price < prod_tracker.buy_below[x]:
-                    print('************************ ALERT! Buy ' +
-                          prod_tracker.code[x]+'! ************************')
+                    print(
+                        title + '\nItem above is below price threshold, sending email!')
+                    yagmail.SMTP('subal.pant9@gmail.com').send(email,
+                                                               'Item(s) on List Available!', 'Item: ' + title + ' available!' + '\n' + url)
             except:
+                print(title + '\nItem above is out of stock or above price threshold!')
                 pass
 
             # Append the gathered information to a log file
             tracker_log = tracker_log.append(log)
-            print('\nAppended ' + prod_tracker.code[x] + '\n' + title + '\n')
+            print('\nAppended ' + prod_tracker.code[x] + '\n')
             sleep(5)
 
         interval += 1
 
-        sleep(interval_hours*1*1)
-        print('End of Interval ' + str(interval) + '\n')
+        # Since the sleep function uses seconds by default, we must multiply by 3600 to convert hours to seconds
+        sleep(interval_hours*3600)
+        print('End of Interval ' + str(interval) + '\n\n')
 
     # Find the last log file and create new log file with new logging data
     last_search = glob(
@@ -126,13 +132,26 @@ if __name__ == '__main__':
 
     # Add long and short argument
     parser.add_argument("-i", "--interval",
-                        help="determine how many times script should run")
+                        help="*OPTIONAL* - determine how many times script should run")
+    parser.add_argument("-s", "--sleep",
+                        help="*OPTIONAL* - determine how many hours between each run of script")
+    parser.add_argument("-e", "--email",
+                        help="*REQUIRED* - enables script to send user email")
 
     # Read arguments from the command line
     args = parser.parse_args()
 
-    # Check for --interval or -i
-    if args.interval:
-        search_product_list(int(args.interval))
+    # Check for command line arguments
+    if args.email:
+        if args.interval:
+            if args.sleep:
+                search_product_list(args.email, int(args.interval), int(args.sleep))
+            else:
+                search_product_list(args.email, int(args.interval))
+        else:
+            if args.sleep:
+                search_product_list(args.email, 1, int(args.sleep))
+            else:
+                search_product_list(args.email)
     else:
-        search_product_list()
+        print("Please use -e or --email followed by your email!")
