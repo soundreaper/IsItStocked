@@ -49,7 +49,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> yagmail.register('YOUR_GMAIL_USERNAME@gmail.com', 'YOUR_GMAIL_PASSWORD')
 >>> exit()
 
-'''
+"""
 Your Gmail account information is now stored in the Mac OS Keychain. To
 prevent any errors, press CMD + Space on your keyboard and type in "keychain"
 and open up "Keychain Access.app". At the top right, search "yagmail" and you
@@ -58,7 +58,7 @@ should see the entry you just created. Double-click on it, go to the
 access this item. This is so that Python has access to this Keychain item and
 doesn't cause any errors. If you wish to remove the item for security
 reasons, right click on the entry in the Keychain app and delete it.
-'''
+"""
 ```
 ### Step 5:
 Open "amazon_scrape.py" in your favorite code editor.
