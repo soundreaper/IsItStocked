@@ -13,16 +13,16 @@ Specifically, the application scrapes the webpages of products that the user can
 ## How to Install?
 ### Step 1:
 Clone this repository.
-```bash
+```git
 git clone https://github.com/soundreaper/IsItStocked.git
-
-# If you don't have virtualenv, install it:
-pip3 install virtualenv
 ```
 ### Step 2:
 Go into the new folder and setup a virtual environment.
 ```bash
 cd IsItStocked
+
+# If you don't have virtualenv, install it:
+pip3 install virtualenv
 
 # I chose "venv" for the virtual environment name, it can be anything.
 virtualenv venv
