@@ -12,6 +12,9 @@ HEADERS = ({'User-Agent':
             'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
             'Accept-Language': 'en-US, en;q=0.5'})
 
+# The gmail account you will use to send emails (you can use your own or make a development email)
+GMAIL_USERNAME = ''
+
 
 def search_product_list(email, interval_count=1, interval_hours=1):
     '''
@@ -98,8 +101,8 @@ def search_product_list(email, interval_count=1, interval_hours=1):
                 if price < prod_tracker.buy_below[x]:
                     print(
                         title + '\nItem above is below price threshold, sending email!')
-                    yagmail.SMTP('subal.pant9@gmail.com').send(email,
-                                                               'Item(s) on List Available!', 'Item: ' + title + ' available!' + '\n' + url)
+                    yagmail.SMTP(GMAIL_USERNAME).send(email,
+                                                      'Item(s) on List Available!', 'Item: ' + title + ' available!' + '\n' + url)
             except:
                 print(title + '\nItem above is out of stock or above price threshold!')
                 pass
@@ -145,7 +148,8 @@ if __name__ == '__main__':
     if args.email:
         if args.interval:
             if args.sleep:
-                search_product_list(args.email, int(args.interval), int(args.sleep))
+                search_product_list(args.email, int(
+                    args.interval), int(args.sleep))
             else:
                 search_product_list(args.email, int(args.interval))
         else:
