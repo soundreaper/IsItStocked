@@ -34,7 +34,7 @@ deactivate
 ### Step 3:
 Install all dependencies.
 ```bash
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 ```
 ### Step 4:
 For automated emailing to function, you must setup Yagmail first. I used my professional email to test all my code but I recommend making a development email with [Gmail](https://mail.google.com/). In any case, you must allow 3rd-party app access to your Gmail account. You can do this by logging into the Gmail account and the clicking your profile icon at the top right and clicking "Manage your Google Account". If asked, enter you password and when the dashboard loads, click on "Security" on the left. Scroll down and find "Less secure apps" and set this option to "YES". This will allow Yagmail to use the registered email.
